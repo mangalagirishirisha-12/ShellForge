@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -Iinclude
-SRC = src/main.c src/input.c
+SRC = src/main.c src/input.c src/parse.c
 TARGET = bin/shellforge
 
 all:

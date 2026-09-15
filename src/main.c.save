@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main()
+{
+    char input[1024];
+
+    printf("=====================================\n");
+    printf(" ShellForge Version 2.0\n");
+    printf("=====================================\n");
+
+    while(1)
+    {
+        printf("myshell> ");
+
+        if(fgets(input, sizeof(input), stdin) == NULL)
+            break;
+
+        input[strcspn(input, "\n")] = '\0';
+
+        // exit command
+        if(strcmp(input, "exit") == 0)
+        {
+            printf("Exiting ShellForge...\n");
+            break;
+        }
+
+        // fork process
+        pid_t pid = fork();
+
+        if(pid == 0)
+        {
+            // child process
+            char *args[] = {input, NULL};
+            execvp(args[0], args);
+
+            // if exec fails
+            printf("Command not found\n");
+            exit(1);
+        }
+        else
+        {
+            // parent waits
+            wait(NULL);
+        }
+    }
+
+    return 0;
+}
